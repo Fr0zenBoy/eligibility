@@ -1,4 +1,4 @@
-# Transaction Post
+# Authoraizer Post
 
 Function that authorizes a transaction for a specific account, following some predefined rules.
 
@@ -57,7 +57,6 @@ Sending a dummy transaction in json format for application at http://localhost:8
 }
 ```
 
-
 ## Prerequisites
 
 To run the application locally and run the tests it is necessary to install python3 and the dependencies in requirements.txt, here i am using python 3.7.x
@@ -82,12 +81,12 @@ Run at the root of the project.
 
 Run unittest fremework in OS X & Linux:
 ```
-python3 -m unittest discover -s tests -v
+wip
 ```
 
 Run unittest fremework in Windows:
 ```
-python -m unittest discover -s tests -v
+wip
 ```
 
 
@@ -99,12 +98,12 @@ Run at the root of the project.
 
 OS X & Linux:
 ```
-python3 application.py
+wip
 ```
 
 Windows:
 ```
-python application.py
+wip
 ```
 
 ### Docker Run
@@ -115,7 +114,6 @@ docker build --no-cache -t transaction:latest .
 
 docker run --rm -it --name transaction -p 8080:8080 transaction:latest
 ```
-
 
 ## Using the Application
 
