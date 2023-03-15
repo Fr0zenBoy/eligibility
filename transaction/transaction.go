@@ -1,6 +1,8 @@
 package transaction
 
 import (
+	"fmt"
+
 	"github.com/Fr0zenBoy/authoraizer/logic"
 )
 
@@ -27,19 +29,22 @@ func (t Transaction)checkLimitTransactionPerMerchant(l LastTransactions, maxTran
 				dealBreaker--
 			}
 		}
-		return maxTransation > 0
+		return dealBreaker >= 0
 	}
-	return false 
+	return true 
 }
 
 func (t Transaction) checkTimeBetweenTransactions(l LastTransactions, maxTimesLimit int) bool {
 	dialBreaker := maxTimesLimit
-	if lt := len(l); lt > 0 {
+	if len(l) > 0 {
 		for _, ltTimes := range l {
-			if logic.TimeDiff(logic.TimeParse(t.Time, TimeLayoutTransaction), logic.TimeParse(ltTimes.Time, TimeLayoutTransaction)) > 120.0 {
+			if logic.TimeDiff(logic.TimeParse(t.Time, TimeLayoutTransaction), logic.TimeParse(ltTimes.Time, TimeLayoutTransaction)) <= 120.0 {
+				fmt.Println(ltTimes.Time)
 				dialBreaker--	
 			}
 		}
+		return dialBreaker >= 0
 	}
-	return dialBreaker > 0
+	fmt.Println("dial breakcer couint", dialBreaker)
+	return true
 }

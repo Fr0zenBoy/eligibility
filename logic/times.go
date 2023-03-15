@@ -15,7 +15,7 @@ func TimeParse(date, layout string) (t time.Time) {
 
 func TimeDiff(actual, previous time.Time) float64 {
 	diff := actual.Sub(previous)
-	infloat := diff.Abs().Hours()
+	infloat := diff.Seconds()
 
 	return infloat
 }

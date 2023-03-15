@@ -22,7 +22,6 @@ func (a Account) checkCardIsActive() bool {
 
 func (a Account) checkFirstTransactionSafe(t transaction.Transaction, l transaction.LastTransactions) bool {
 	areEmptyList := len(l) == 0
-
 	if areEmptyList {
 		return logic.GetPercentege(t.Amount, a.Limit) < 90
 	}
