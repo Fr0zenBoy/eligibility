@@ -16,7 +16,7 @@ Rules:
 
 ## How it works
 
-Sending a dummy transaction in json format for application at http://localhost:8080/transactions.
+Sending a dummy transaction in json format for application at http://localhost:8080/api/authoraizer.
 
 ### Schema
 
@@ -65,12 +65,12 @@ Run at the root of the project.
 
 OS X & Linux:
 ```
-sudo pip3 install -r requirements.txt
+wip
 ```
 
 Windows:
 ```
-pip install -r requirements.txt
+wip
 ```
 
 
@@ -115,23 +115,13 @@ docker build --no-cache -t transaction:latest .
 docker run --rm -it --name transaction -p 8080:8080 transaction:latest
 ```
 
-## Using the Application
-
-To test the application and write integration tests I used the postman.
-
-Click the following button to import the Transaction API as a collection:
-
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/831370d6dffce33dc303)
-
-You can also be part of my workspace: https://app.getpostman.com/join-team?invite_code=30c82ab2dad03405ae34b842a067237e
-
 
 ## Command Line
 
 If you want to test an application via the command line here is an example:
 
 ```
-curl -H "Content-Type: application/json" --data @body.json http://localhost:8080/transaction
+curl -H "Content-Type: application/json" --data @body.json http://localhost:8080/api/authoraizer
 ```
 
 In the project root inside "json_examples" folder you also find examples of json to use.

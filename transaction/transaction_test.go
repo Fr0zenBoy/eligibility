@@ -6,7 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
 func TestCheckLimitTransactionsPeerMerchant(t *testing.T) {
 	
 	someTransaction := Transaction{
@@ -16,9 +15,6 @@ func TestCheckLimitTransactionsPeerMerchant(t *testing.T) {
 	}
 
 	emptylastTransactions := LastTransactions{}
-
-
-
 	sameMerchants := LastTransactions{
 		Transaction{
 			Merchant: "Moes",
@@ -47,11 +43,18 @@ func TestCheckLimitTransactionsPeerMerchant(t *testing.T) {
 	})
 }
 
+func TestDiffBeetwennTwoTime(t *testing.T) {
+	firstTIme := "2023-03-14 18:04:00"
+	secondidTime := "2023-03-14 14:04:00"
+	result := diffBeetweenTwoTime(firstTIme, secondidTime)
+	var expected float64 = 14400
+
+	assert.Equal(t , result, expected)
+}
+
 func TestCheckTimeBeetweenTransactions(t *testing.T){
 
 	someTransaction := Transaction{
-		Merchant: "Moes",
-		Amount: 300.0,
 		Time: "2023-03-14 18:04:00",
 	}
 	emptyLastTransactions := LastTransactions{}
@@ -61,29 +64,46 @@ func TestCheckTimeBeetweenTransactions(t *testing.T){
 			Time: "2023-03-14 18:03:00",
 		},
 		Transaction{
-			Time: "2023-03-14 18:02:00",
+			Time: "2023-03-14 18:02:50",
 		},
 		Transaction{
-			Time: "2023-03-14 18:01:00",
+			Time: "2023-03-14 18:02:30",
 		},
 		Transaction{
 			Time: "2023-03-14 18:00:00",
 		},
-		Transaction{
-			Time: "2023-03-14 17:59:00",
-		},
-
 	}
 
-	t.Run("Check the last transactions are empty list", func(t *testing.T){
+	quiteTime := LastTransactions{
+		Transaction{
+			Time: "2023-03-14 18:03:00",
+		},
+		Transaction{
+			Time: "2023-03-14 17:02:50",
+		},
+		Transaction{
+			Time: "2023-03-14 14:02:30",
+		},
+		Transaction{
+			Time: "2023-03-14 10:00:00",
+		},
+	}
+
+	t.Run("Test the last transactions are empty list", func(t *testing.T){
 		withEmpty := someTransaction.checkTimeBetweenTransactions(emptyLastTransactions, 3)
 
 		assert.Equal(t, true, withEmpty)
 	})
 
-	t.Run("Check the last transactions have more transactions than limit", func(t *testing.T){
+	t.Run("Test the last transactions have more transactions than limit", func(t *testing.T){
 		limitExceeded := someTransaction.checkTimeBetweenTransactions(litterTime, 3)
 
 		assert.Equal(t, false, limitExceeded)
+	})
+
+	t.Run("Test the last transactions have quite time beetween transactions", func(t *testing.T){
+		limitExceeded := someTransaction.checkTimeBetweenTransactions(quiteTime, 3)
+
+		assert.Equal(t, true, limitExceeded)
 	})
 }

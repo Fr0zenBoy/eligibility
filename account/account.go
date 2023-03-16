@@ -1,8 +1,11 @@
 package account
 
 import (
-	"github.com/Fr0zenBoy/authoraizer/transaction"
+	"fmt"
+	"regexp"
+
 	"github.com/Fr0zenBoy/authoraizer/logic"
+	"github.com/Fr0zenBoy/authoraizer/transaction"
 )
 
 type Account struct {
@@ -21,17 +24,25 @@ func (a Account) checkCardIsActive() bool {
 }
 
 func (a Account) checkFirstTransactionSafe(t transaction.Transaction, l transaction.LastTransactions) bool {
-	areEmptyList := len(l) == 0
-	if areEmptyList {
-		return logic.GetPercentege(t.Amount, a.Limit) < 90
+	if len(l) == 0 {
+		return logic.GetPercentege(t.Amount, a.Limit) < 90.0
 	}
-	return false
+	return true
+}
+
+func matchMerchantsInDenylist(merchantInTransaction, merchantInDenyList string) bool {
+	match, err := regexp.Compile(fmt.Sprintf("(?i)%s", merchantInDenyList))
+	if err != nil {
+		fmt.Println(err)
+	}
+	return match.MatchString(merchantInTransaction)
 }
 
 func (a Account) checkDenyList(t transaction.Transaction) bool {
 	allowed := true
-	for _, merchant := range a.DenyList {
-		if merchant == t.Merchant {
+
+	for _, merchants := range a.DenyList {
+		if matchMerchantsInDenylist(t.Merchant, merchants) {
 			allowed = false
 			break
 		}
