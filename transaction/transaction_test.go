@@ -28,16 +28,37 @@ func TestCheckLimitTransactionsPeerMerchant(t *testing.T) {
 		Transaction{
 			Merchant: "Moes",
 		},
+		Transaction{
+			Merchant: "Moes",
+		},
+		Transaction{
+			Merchant: "Moes",
+		},
+		Transaction{
+			Merchant: "Moes",
+		},
+		Transaction{
+			Merchant: "Moes",
+		},
+		Transaction{
+			Merchant: "Moes",
+		},
+		Transaction{
+			Merchant: "Moes",
+		},
+		Transaction{
+			Merchant: "Moes",
+		},
 	}
 
 	t.Run("Test Check the last transaction list is empty and return true", func(t *testing.T){
-		isEmpty := someTransaction.checkLimitTransactionPerMerchant(emptylastTransactions, 3)
+		isEmpty := someTransaction.CheckLimitTransactionPerMerchant(emptylastTransactions)
 
 		assert.Equal(t, true, isEmpty)
 	})
 
 	t.Run("Test Check Limit Transaction peer Merchant is greater than limit and return false", func(t *testing.T){
-		isSame := someTransaction.checkLimitTransactionPerMerchant(sameMerchants, 3)
+		isSame := someTransaction.CheckLimitTransactionPerMerchant(sameMerchants)
 
 		assert.Equal(t, false, isSame)
 	})
@@ -57,6 +78,7 @@ func TestCheckTimeBeetweenTransactions(t *testing.T){
 	someTransaction := Transaction{
 		Time: "2023-03-14 18:04:00",
 	}
+
 	emptyLastTransactions := LastTransactions{}
 
 	litterTime := LastTransactions{
@@ -70,7 +92,7 @@ func TestCheckTimeBeetweenTransactions(t *testing.T){
 			Time: "2023-03-14 18:02:30",
 		},
 		Transaction{
-			Time: "2023-03-14 18:00:00",
+			Time: "2023-03-14 18:02:28",
 		},
 	}
 
@@ -90,19 +112,19 @@ func TestCheckTimeBeetweenTransactions(t *testing.T){
 	}
 
 	t.Run("Test the last transactions are empty list", func(t *testing.T){
-		withEmpty := someTransaction.checkTimeBetweenTransactions(emptyLastTransactions, 3)
+		withEmpty := someTransaction.CheckTimeBetweenTransactions(emptyLastTransactions)
 
 		assert.Equal(t, true, withEmpty)
 	})
 
 	t.Run("Test the last transactions have more transactions than limit", func(t *testing.T){
-		limitExceeded := someTransaction.checkTimeBetweenTransactions(litterTime, 3)
+		limitExceeded := someTransaction.CheckTimeBetweenTransactions(litterTime)
 
 		assert.Equal(t, false, limitExceeded)
 	})
 
 	t.Run("Test the last transactions have quite time beetween transactions", func(t *testing.T){
-		limitExceeded := someTransaction.checkTimeBetweenTransactions(quiteTime, 3)
+		limitExceeded := someTransaction.CheckTimeBetweenTransactions(quiteTime)
 
 		assert.Equal(t, true, limitExceeded)
 	})

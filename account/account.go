@@ -9,21 +9,21 @@ import (
 )
 
 type Account struct {
-	CardIsActive bool  `json:"cardIsActive"`
-	IsWhiteListed bool `json:"isWhiteListed"`
-	Limit float64      `json:"limit"`
-	DenyList []string  `json:"denyList"`
+	CardIsActive bool  `json:"cardIsActive" binding:"required"`
+	IsWhiteListed bool `json:"isWhiteListed" binding:"required"`
+	Limit float64      `json:"limit" binding:"required"`
+	DenyList []string  `json:"denyList" binding:"required"`
 }
 
-func (a Account) checkAmountAboveLimit(t transaction.Transaction) bool {
+func (a Account) CheckAmountAboveLimit(t transaction.Transaction) bool {
 	return a.Limit > t.Amount
 }
 
-func (a Account) checkCardIsActive() bool {
+func (a Account) CheckCardIsActive() bool {
 	return a.CardIsActive
 }
 
-func (a Account) checkFirstTransactionSafe(t transaction.Transaction, l transaction.LastTransactions) bool {
+func (a Account) CheckFirstTransactionSafe(t transaction.Transaction, l transaction.LastTransactions) bool {
 	if len(l) == 0 {
 		return logic.GetPercentege(t.Amount, a.Limit) < 90.0
 	}
@@ -38,7 +38,7 @@ func matchMerchantsInDenylist(merchantInTransaction, merchantInDenyList string) 
 	return match.MatchString(merchantInTransaction)
 }
 
-func (a Account) checkDenyList(t transaction.Transaction) bool {
+func (a Account) CheckDenyList(t transaction.Transaction) bool {
 	allowed := true
 
 	for _, merchants := range a.DenyList {

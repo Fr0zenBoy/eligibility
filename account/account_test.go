@@ -26,14 +26,14 @@ func TestCheckAmountIsAvaliable(t *testing.T) {
 	}
 
 	t.Run("Test Amount is bigger than transaction ammount", func(t *testing.T) {
-		result := someClient.checkAmountAboveLimit(someTransaction)
+		result := someClient.CheckAmountAboveLimit(someTransaction)
 		expected := true
 
 		assert.Equal(t, result, expected)
 	})
 
 	t.Run("Test Amount is smaller than transaction ammount", func(t *testing.T) {
-		result := someClient.checkAmountAboveLimit(smillerAmmount)
+		result := someClient.CheckAmountAboveLimit(smillerAmmount)
 		expected := false
 
 		assert.Equal(t, result, expected)
@@ -50,13 +50,13 @@ func TestAccountIsActive(t *testing.T) {
 	}
 
 	t.Run("Test active account", func(t *testing.T) {
-		result := ActiveClient.checkCardIsActive()
+		result := ActiveClient.CheckCardIsActive()
 		expected := true
 		assert.Equal(t, expected, result)
 	})
 
 	t.Run("Test desactive account", func(t *testing.T) {
-		result := DesactiveClient.checkCardIsActive()
+		result := DesactiveClient.CheckCardIsActive()
 		expected := false
 		assert.Equal(t, expected, result)
 	})
@@ -86,13 +86,13 @@ func TestFisrtTransactionIsSecure(t *testing.T) {
 	emptyLastTransactions := transaction.LastTransactions{}
 
 	t.Run("Test a valid first transaction", func(t *testing.T) {
-		result := validClient.checkFirstTransactionSafe(lowAmountTransaction, emptyLastTransactions)
+		result := validClient.CheckFirstTransactionSafe(lowAmountTransaction, emptyLastTransactions)
 		expected := true
 		assert.Equal(t, expected, result)
 	})
 
 	t.Run("Test a invalid first transaction", func(t *testing.T) {
-		result := validClient.checkFirstTransactionSafe(bigAmmountTransaction, emptyLastTransactions)
+		result := validClient.CheckFirstTransactionSafe(bigAmmountTransaction, emptyLastTransactions)
 		expected := false
 		assert.Equal(t, expected, result)
 	})
@@ -131,13 +131,13 @@ func TestCheckDenyList(t *testing.T) {
 		Time: "20023-02-02 05:00:49",
 	}
 	t.Run("Test the merchant in transaction do not stay in the black list", func(t *testing.T){
-		result := validAccount.checkDenyList(validTransaction)
+		result := validAccount.CheckDenyList(validTransaction)
 		expected := true
 		assert.Equal(t, expected, result)
 	})
 
 	t.Run("Test the merchant in transaction stay in the black list", func(t *testing.T){
-		result := validAccount.checkDenyList(invalidTransaction)
+		result := validAccount.CheckDenyList(invalidTransaction)
 		expected := false
 		assert.Equal(t, expected, result)
 	})

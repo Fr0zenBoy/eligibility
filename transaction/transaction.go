@@ -1,25 +1,24 @@
 package transaction
 
-import (
-	"github.com/Fr0zenBoy/authoraizer/logic"
-)
+import "github.com/Fr0zenBoy/authoraizer/logic"
 
 const (
-	maxTransation = 10
-	MaxNumberTransactionsIn2M = 3
-	TimeLayoutTransaction = "2006-01-02 15:04:05"
+	maxTransactionsPeerMerchant = 10
+	safeTransactionTimeInSeconds = 120.0
+	maxTransactionUnderTimeLimit = 3
+	timeLayoutTransaction = "2006-01-02 15:04:05"
 )
 
 type Transaction struct {
-	Merchant string `json:"merchant"`
-	Amount float64  `json:"amount"`
-	Time string     `json:"time"`
+	Merchant string `json:"merchant" binding:"required"`
+	Amount float64  `json:"amount" binding:"required"`
+	Time string     `json:"time" binding:"required"`
 }
 
 type LastTransactions []Transaction
 
-func (t Transaction)checkLimitTransactionPerMerchant(l LastTransactions, maxTransation int) bool {
-	dealBreaker := maxTransation
+func (t Transaction) CheckLimitTransactionPerMerchant(l LastTransactions) bool {
+	dealBreaker := maxTransactionsPeerMerchant
 
 	if transations := len(l); transations > 0 {
 		for i := 0; i < transations; i++ {
@@ -34,19 +33,19 @@ func (t Transaction)checkLimitTransactionPerMerchant(l LastTransactions, maxTran
 
 func diffBeetweenTwoTime(ftime, stime string) float64 {
 
-	return logic.TimeDiff(logic.TimeParse(ftime, TimeLayoutTransaction),
-		                    logic.TimeParse(stime, TimeLayoutTransaction))
+	return logic.TimeDiff(logic.TimeParse(ftime, timeLayoutTransaction),
+		                    logic.TimeParse(stime, timeLayoutTransaction))
 }
 
-func (t Transaction) checkTimeBetweenTransactions(l LastTransactions, maxTimesLimit int) bool {
-	dialBreaker := MaxNumberTransactionsIn2M
-	if len(l) > 0 {
-		for i := 0; i < MaxNumberTransactionsIn2M; i++ {
-			if diffBeetweenTwoTime(t.Time, l[i].Time) <= 120.0 {
-				dialBreaker--	
+func (t Transaction) CheckTimeBetweenTransactions(l LastTransactions) bool {
+	dialBreaker := 0
+	if transaction := len(l); transaction > 0 {
+		for i := 0; i < transaction; i++ {
+			if diffBeetweenTwoTime(t.Time, l[i].Time) <= safeTransactionTimeInSeconds {
+				dialBreaker++
 			}
 		}
-		return dialBreaker > 0
+		return dialBreaker <= maxTransactionUnderTimeLimit
 	}
 	return true
 }
