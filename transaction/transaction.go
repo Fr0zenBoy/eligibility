@@ -3,9 +3,9 @@ package transaction
 import "github.com/Fr0zenBoy/authoraizer/logic"
 
 const (
-	maxTransactionsPeerMerchant = 10
+	maxTransactionsPerMerchant = 10
 	safeTransactionTimeInSeconds = 120.0
-	maxTransactionUnderTimeLimit = 3
+	maxTransactionsUnderTimeLimit = 3
 	timeLayoutTransaction = "2006-01-02 15:04:05"
 )
 
@@ -17,35 +17,28 @@ type Transaction struct {
 
 type LastTransactions []Transaction
 
-func (t Transaction) CheckLimitTransactionPerMerchant(l LastTransactions) bool {
-	dealBreaker := maxTransactionsPeerMerchant
-
+func (t Transaction) TransactionLimitPerMerchants(l LastTransactions) bool {
+	var dealBreaker int
 	if transations := len(l); transations > 0 {
 		for i := 0; i < transations; i++ {
 			if t.Merchant == l[i].Merchant {
-				dealBreaker--
+				dealBreaker++
 			}
 		}
-		return dealBreaker >= 0
+		return dealBreaker > maxTransactionsPerMerchant
 	}
-	return true 
+	return false
 }
 
-func diffBeetweenTwoTime(ftime, stime string) float64 {
-
-	return logic.TimeDiff(logic.TimeParse(ftime, timeLayoutTransaction),
-		                    logic.TimeParse(stime, timeLayoutTransaction))
-}
-
-func (t Transaction) CheckTimeBetweenTransactions(l LastTransactions) bool {
-	dialBreaker := 0
+func (t Transaction) TimeLimitBeetweenTrancastions(l LastTransactions) bool {
+	var dealBreaker int
 	if transaction := len(l); transaction > 0 {
 		for i := 0; i < transaction; i++ {
-			if diffBeetweenTwoTime(t.Time, l[i].Time) <= safeTransactionTimeInSeconds {
-				dialBreaker++
+			if logic.ParseAndGetTimeDiff(t.Time, l[i].Time, timeLayoutTransaction) <= safeTransactionTimeInSeconds {
+				dealBreaker++
 			}
 		}
-		return dialBreaker <= maxTransactionUnderTimeLimit
+		return dealBreaker > maxTransactionsUnderTimeLimit
 	}
-	return true
+	return false
 }

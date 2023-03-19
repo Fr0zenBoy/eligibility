@@ -7,138 +7,114 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCheckAmountIsAvaliable(t *testing.T) {
-	someClient := Account{
-		CardIsActive: true,
-		IsWhiteListed: true,
-		Limit: 5000.0,
-		DenyList: []string{"moes"},
+func newTrue() *bool {
+	b := true
+	return &b
+}
+
+func newFalse() *bool {
+	b := false
+	return &b
+}
+
+func TestAccountIsDisable(t *testing.T) {
+
+	ActiveCard := Account{
+		CardIsActive: newTrue(),
 	}
 
-	someTransaction := transaction.Transaction{
+	DesactiveCard := Account{
+		CardIsActive: newFalse(),
+	}
+
+	t.Run("Test account is disabled and returens false", func(t *testing.T) {
+		actual := ActiveCard.CardIsDisabled()
+		assert.Equal(t, false, actual)
+	})
+
+	t.Run("Test account is disabled and returens true", func(t *testing.T) {
+		actual := DesactiveCard.CardIsDisabled()
+		assert.Equal(t, true, actual)
+	})
+}
+
+func TestAmountAboveLimit(t *testing.T) {
+	someClient := Account{
+		Limit: 5000.0,
+	}
+
+	smallValue := transaction.Transaction{
 		Merchant: "Moes",
 		Amount: 300.0,
 	}
 
-	smillerAmmount := transaction.Transaction{
+	bigValue := transaction.Transaction{
 		Merchant: "Moes",
 		Amount: 6000.0,
 	}
 
-	t.Run("Test Amount is bigger than transaction ammount", func(t *testing.T) {
-		result := someClient.CheckAmountAboveLimit(someTransaction)
-		expected := true
+	t.Run("Test Amount is less than transaction ammount and returns false", func(t *testing.T) {
+		result := someClient.AmountAboveLimit(smallValue)
 
-		assert.Equal(t, result, expected)
+		assert.Equal(t, false, result)
 	})
 
-	t.Run("Test Amount is smaller than transaction ammount", func(t *testing.T) {
-		result := someClient.CheckAmountAboveLimit(smillerAmmount)
-		expected := false
+	t.Run("Test Amount is bigger than transaction amount and returns true", func(t *testing.T) {
+		result := someClient.AmountAboveLimit(bigValue)
 
-		assert.Equal(t, result, expected)
+		assert.Equal(t, true, result)
 	})
 }
 
-func TestAccountIsActive(t *testing.T) {
-	ActiveClient := Account{
-		CardIsActive: true,
-	}
-
-	DesactiveClient := Account{
-		CardIsActive: false,
-	}
-
-	t.Run("Test active account", func(t *testing.T) {
-		result := ActiveClient.CheckCardIsActive()
-		expected := true
-		assert.Equal(t, expected, result)
-	})
-
-	t.Run("Test desactive account", func(t *testing.T) {
-		result := DesactiveClient.CheckCardIsActive()
-		expected := false
-		assert.Equal(t, expected, result)
-	})
-}
-
-func TestFisrtTransactionIsSecure(t *testing.T) {
+func TestFirstTransactionAreUnsafe(t *testing.T) {
 
 	validClient := Account{
-		CardIsActive: true,
-		IsWhiteListed: true,
 		Limit: 5000.0,
-		DenyList: []string{"moes"},
-	}
-
-	lowAmountTransaction := transaction.Transaction{
-		Merchant: "Moes",
-		Amount: 50.5,
-		Time: "20023-02-02 10:08:05",
-	}
-
-	bigAmmountTransaction := transaction.Transaction{
-		Merchant: "Moes",
-		Amount: 50000.0,
-		Time: "20023-02-02 10:08:05",
 	}
 
 	emptyLastTransactions := transaction.LastTransactions{}
 
-	t.Run("Test a valid first transaction", func(t *testing.T) {
-		result := validClient.CheckFirstTransactionSafe(lowAmountTransaction, emptyLastTransactions)
-		expected := true
-		assert.Equal(t, expected, result)
+	lowAmountTransaction := transaction.Transaction{
+		Amount: 50.5,
+	}
+
+	bigAmmountTransaction := transaction.Transaction{
+		Amount: 50000.0,
+	}
+
+	t.Run("Test the first transaction has an amount less than the threshold and return false", func(t *testing.T) {
+		actual := validClient.FirstTransactionAreUnsafe(lowAmountTransaction, emptyLastTransactions)
+		assert.Equal(t, false, actual)
 	})
 
-	t.Run("Test a invalid first transaction", func(t *testing.T) {
-		result := validClient.CheckFirstTransactionSafe(bigAmmountTransaction, emptyLastTransactions)
-		expected := false
-		assert.Equal(t, expected, result)
+	t.Run("Test the first transaction has an amount greater than the threshold and return true", func(t *testing.T) {
+		actual := validClient.FirstTransactionAreUnsafe(bigAmmountTransaction, emptyLastTransactions)
+		assert.Equal(t, true, actual)
 	})
 }
 
-func TestMatchMerchantsInDenylist(t *testing.T) {
-	moes := "moes"
-	moesUpperCase := "Moes"
-	theCrab := "The Crab Shed"  
-	theCrabLowerCase := "the crab shed"
-	centralPerk := "Central Perk"
-	centralPerkRandomCase := "cEnTraL PERk" 
-	assert.Equal(t, matchMerchantsInDenylist(moes, moesUpperCase), true)
-	assert.Equal(t, matchMerchantsInDenylist(theCrab, theCrabLowerCase), true)
-	assert.Equal(t, matchMerchantsInDenylist(centralPerk, centralPerkRandomCase), true)
-}
+func TestMerchantInDenyList(t *testing.T) {
 
-func TestCheckDenyList(t *testing.T) {
-
-	validAccount := Account{
-		CardIsActive: true,
-		IsWhiteListed: true,
-		Limit: 5000.0,
+	someAccount := Account{
 		DenyList: []string{"Moes", "The Crab Shed", "Central Perk"},
 	}
 
 	validTransaction := transaction.Transaction{
 		Merchant: "The Cheesecake Factory",
-		Amount: 50000.0,
-		Time: "20023-02-02 10:08:05",
 	}
 
 	invalidTransaction := transaction.Transaction{
 		Merchant: "The Crab Shed",
-		Amount: 50000.0,
-		Time: "20023-02-02 05:00:49",
 	}
-	t.Run("Test the merchant in transaction do not stay in the black list", func(t *testing.T){
-		result := validAccount.CheckDenyList(validTransaction)
-		expected := true
-		assert.Equal(t, expected, result)
+
+	t.Run("Test the merchant is on the denylist and return true", func(t *testing.T) {
+		actual := someAccount.MerchantInDenyList(invalidTransaction)
+		assert.Equal(t, true, actual)
 	})
 
-	t.Run("Test the merchant in transaction stay in the black list", func(t *testing.T){
-		result := validAccount.CheckDenyList(invalidTransaction)
-		expected := false
-		assert.Equal(t, expected, result)
+	t.Run("Test the merchant is not on the denylist and return false", func(t *testing.T) {
+		actual := someAccount.MerchantInDenyList(validTransaction)
+		assert.Equal(t, false, actual)
 	})
+
 }

@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func TestCalc(t *testing.T) {
+func TestGetPercentege(t *testing.T) {
 	result := GetPercentege(4000, 5000)
 	expected := 80.0
 

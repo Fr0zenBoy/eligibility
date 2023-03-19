@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"fmt"
-
 	"github.com/Fr0zenBoy/authoraizer/account"
 	"github.com/Fr0zenBoy/authoraizer/transaction"
 )
@@ -23,30 +21,31 @@ type OutPut struct {
 	DenyReasons []string `json:"denyReasons" binding:"required"`
 }
 
-func (r *Request) Allowed(o OutPut) OutPut {
+func (r Request) Allowed(o OutPut) OutPut {
 	account := r.Account
 	transaction := r.Transaction
 	lastTransactions := r.LastTransactions
 
 	reasons := map[string]bool{
-		"Card is not active?": account.CardIsActive,
-		"Amount are more than above the limit": account.CheckAmountAboveLimit(transaction),
-		"The first transaction do not are more than obove 90%": account.CheckFirstTransactionSafe(transaction, lastTransactions),
-		"The Merchant stay present in the deny list": account.CheckDenyList(transaction),
-		"Limit of transaction per merchant exed": transaction.CheckLimitTransactionPerMerchant(lastTransactions),
-		"Time beetween transactions execceded": transaction.CheckTimeBetweenTransactions(lastTransactions),
+		"Card is not active!": account.CardIsDisabled(),
+		"Amount are more than above the limit!": account.AmountAboveLimit(transaction),
+		"The first transaction do not are more than obove 90% of limit!": account.FirstTransactionAreUnsafe(transaction, lastTransactions),
+		"The Merchant stay present in the deny list!": account.MerchantInDenyList(transaction),
+		"Limit of transaction per merchant exed!": transaction.TransactionLimitPerMerchants(lastTransactions),
+		"Time beetween transactions execceded!": transaction.TimeLimitBeetweenTrancastions(lastTransactions),
 	}
-	fmt.Println(reasons)
 
 	for k, v := range reasons {
-		if !v {
+		if v {
 			o.DenyReasons = append(o.DenyReasons, k)
 		}
 	}
 
+	o.NewLimit = account.Limit
+
 	if len(o.DenyReasons) == 0 {
 		o.Approved = true
-		o.NewLimit = (account.Limit - transaction.Amount)
+		o.NewLimit -= transaction.Amount
 		o.DenyReasons = []string{}
 		return o
 	}

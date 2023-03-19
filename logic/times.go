@@ -19,3 +19,7 @@ func TimeDiff(actual, previous time.Time) float64 {
 
 	return infloat
 }
+
+func ParseAndGetTimeDiff(x, y, layout string) float64 {
+	return TimeDiff(TimeParse(x, layout), TimeParse(y, layout))
+}

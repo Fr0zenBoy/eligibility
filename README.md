@@ -25,20 +25,20 @@ Sending a dummy transaction in json format for application at http://localhost:8
 ```json
 {
   "account": {
-    "cardIsActive": "true",
-    "limit": "5000",
+    "cardIsActive": true,
+    "limit": 5000,
     "denyList": ["Moes"],
-    "isWhitelisted": "true"
+    "isWhitelisted": true
   },
   "transaction": {
     "merchant": "MacLarens",
-    "amount": "2000",
+    "amount": 2000,
     "time": "2019-06-19 21:04:00"
   },
   "lastTransactions": [
     {
       "merchant": "MacLarens",
-      "amount": "1000",
+      "amount": 1000,
       "time": "2019-06-19 21:01:00"
     }
   ]
@@ -51,8 +51,8 @@ Sending a dummy transaction in json format for application at http://localhost:8
 
 ```json
 {
-    "approved": "True",
-    "newLimit": "3000.0",
+    "approved": True,
+    "newLimit": 3000.0,
     "deniedReasons": []
 }
 ```
@@ -110,9 +110,9 @@ wip
 
 Run the command:
 ```
-docker build --no-cache -t transaction:latest .
+docker build --no-cache -t authoraizer:latest .
 
-docker run --rm -it --name transaction -p 8080:8080 transaction:latest
+docker run --rm -it --name authoraizer -p 8080:8080 authoraizer:latest
 ```
 
 

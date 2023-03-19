@@ -18,9 +18,12 @@ import (
 func main() {
 	router := gin.New()
 	router.POST("/api/authoraizer", func(ctx *gin.Context) {
-		body := &controller.Request{}
-		if err := ctx.BindJSON(&body); err != nil {
-			ctx.AbortWithError(http.StatusBadRequest, err)
+		body := controller.Request{}
+		if err := ctx.ShouldBindJSON(&body); err != nil {
+			ctx.AbortWithStatusJSON(http.StatusBadRequest,
+				gin.H{
+					"error": err.Error(),
+					"message": "Invalid inputs. please check your inputs"})
 			return
 		}
 		fmt.Println(body)
