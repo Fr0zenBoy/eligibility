@@ -59,20 +59,14 @@ Sending a dummy transaction in json format for application at http://localhost:8
 
 ## Prerequisites
 
-To run the application locally and run the tests it is necessary to install python3 and the dependencies in requirements.txt, here i am using python 3.7.x
+To run the application locally and run the tests it is necessary to install golang.
 
 Run at the root of the project.
 
 OS X & Linux:
 ```
-wip
+go run .
 ```
-
-Windows:
-```
-wip
-```
-
 
 ## Running Unittest
 
@@ -81,14 +75,8 @@ Run at the root of the project.
 
 Run unittest fremework in OS X & Linux:
 ```
-wip
+go test ./...
 ```
-
-Run unittest fremework in Windows:
-```
-wip
-```
-
 
 ## Deploy
 
@@ -98,24 +86,40 @@ Run at the root of the project.
 
 OS X & Linux:
 ```
-wip
+go run .
 ```
 
-Windows:
+Binary:
 ```
-wip
+go build .
+
+sudo chmod +x authoraizer
+
+./authoraizer
+```
+
+### Docker Build
+
+Run the command:
+```
+docker build --tag docker-authoraizer .
+```
+
+Muilt Stage:
+``` 
+docker build -t docker-authoraizer:multistage -f Dockerfile.multistage .
 ```
 
 ### Docker Run
 
-Run the command:
 ```
-docker build --no-cache -t authoraizer:latest .
-
-docker run --rm -it --name authoraizer -p 8080:8080 authoraizer:latest
+ docker run --rm --name authoraizer -p 8080:8080 docker-authoraizer
 ```
 
-
+Muilt Stage:
+```
+docker run --rm --name authoraizer -p 8080:8080 authoraizer:multistage
+```
 ## Command Line
 
 If you want to test an application via the command line here is an example:

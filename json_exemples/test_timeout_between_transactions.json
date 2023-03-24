@@ -1,0 +1,30 @@
+{
+  "account": {
+    "cardIsActive": true,
+    "limit": 2200,
+    "blacklist": [""],
+    "isWhitelisted": true
+  },
+  "transaction": {
+    "merchant": "MacLarens",
+    "amount": 2000,
+    "time": "2019-06-19 19:04:00"
+  },
+  "lastTransactions": [
+    {
+      "merchant": "MacLarens",
+      "amount": 1000,
+      "time": "2019-06-19 19:04:00"
+    },
+    {
+      "merchant": "MacLarens",
+      "amount": 1000,
+      "time": "2019-06-19 19:04:00"
+    },
+    {
+      "merchant": "MacLarens",
+      "amount": 1000,
+      "time": "2019-06-19 19:04:00"
+    }
+  ]
+}

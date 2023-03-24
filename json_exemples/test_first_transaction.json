@@ -1,0 +1,14 @@
+{
+  "account": {
+    "cardIsActive": true,
+    "limit": 5000,
+    "blacklist": ["Moes"],
+    "isWhitelisted": true
+  },
+  "transaction": {
+    "merchant": "MacLarens",
+    "amount": 4900,
+    "time": "2019-06-19 21:04:00"
+  },
+  "lastTransactions": []
+}

@@ -126,7 +126,6 @@ func TestAuthoraizerHandler(t *testing.T) {
 					Amount: 20.0,
 					Time: "2019-06-19 21:04:00",
 				},
-
 				transaction.Transaction{
 					Merchant: "Maclarens",
 					Amount: 20.0,

@@ -1,0 +1,14 @@
+.cache
+**/*.class
+.editorconfig
+.git
+AUTHORS.md
+CONTRIBUTING.md
+LICENSE
+Makefile
+NOTICE
+*.md
+!README*.md
+README-secret.mdarm/
+powerpc/
+mips/
