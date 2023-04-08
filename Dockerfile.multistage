@@ -5,21 +5,23 @@ FROM golang:1.20.2-buster AS build
 
 WORKDIR /app
 
-COPY . .
+COPY pkg .
+
+COPY main.go .
 
 RUN go mod download
 
-RUN go build -o /docker-authoraizer
+RUN go build -o /docker-eligibility
 
 ## Deploy
 FROM gcr.io/distroless/base-debian10
 
 WORKDIR /
 
-COPY --from=build /docker-authoraizer /docker-authoraizer
+COPY --from=build /docker-eligibility /docker-eligibility
 
 EXPOSE 8080
 
 USER nonroot:nonroot
 
-ENTRYPOINT ["/docker-authoraizer"]
+ENTRYPOINT ["/docker-eligibility"]

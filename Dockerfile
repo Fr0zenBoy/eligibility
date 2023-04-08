@@ -4,10 +4,12 @@ WORKDIR /app
 
 RUN go mod download
 
-COPY . .
+COPY pkg .
 
-RUN go build -o /docker-authoraizer
+COPY main.go .
+
+RUN go build -o /docker-eligibility
 
 expose 8080
 
-CMD [ "/docker-authoraizer" ]
+CMD [ "/docker-eligibility" ]

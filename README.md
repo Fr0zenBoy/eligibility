@@ -1,22 +1,10 @@
-# Authoraizer Post
+# Eligibility
 
-Function that authorizes a transaction for a specific account, following some predefined rules.
-
-
-Rules:
-
-```
-1. The transaction amount should not be above limit
-2. No transaction should be approved when the card is blocked
-3. The first transaction shouldn't be above 90% of the limit
-4. There should not be more than 10 transactions on the same merchant
-5. Merchant blacklist
-6. There should not be more than 3 transactions on a 2 minutes interval
-```
+A check system that validates that the client can be supported within the platform
 
 ## How it works
 
-Sending a dummy transaction in json format for application at http://localhost:8080/api/authoraizer.
+Sending a dummy transaction in json format for application at http://localhost:8080/api/eligibility.
 
 ### Schema
 
@@ -24,23 +12,23 @@ Sending a dummy transaction in json format for application at http://localhost:8
 
 ```json
 {
-  "account": {
-    "cardIsActive": true,
-    "limit": 5000,
-    "denyList": ["Moes"],
-    "isWhitelisted": true
-  },
-  "transaction": {
-    "merchant": "MacLarens",
-    "amount": 2000,
-    "time": "2019-06-19 21:04:00"
-  },
-  "lastTransactions": [
-    {
-      "merchant": "MacLarens",
-      "amount": 1000,
-      "time": "2019-06-19 21:01:00"
-    }
+  "numeroDoDocumento": "14041737706",
+  "tipoDeConexao": "bifasico",
+  "classeDeConsumo": "comercial",
+  "modalidadeTarifaria": "convencional",
+  "historicoDeConsumo": [
+    3878,
+    9760,
+    5976,
+    2797,
+    2481,
+    5731,
+    7538,
+    4392,
+    7859,
+    4160,
+    6941,
+    4597 
   ]
 }
 ```
@@ -51,9 +39,8 @@ Sending a dummy transaction in json format for application at http://localhost:8
 
 ```json
 {
-    "approved": True,
-    "newLimit": 3000.0,
-    "deniedReasons": []
+   "elegivel": true,
+   "economiaAnualDeCO2": 5553.24,
 }
 ```
 
@@ -75,7 +62,7 @@ Run at the root of the project.
 
 Run unittest fremework in OS X & Linux:
 ```
-go test ./...
+go test ./pkg...
 ```
 
 ## Deploy
@@ -93,39 +80,39 @@ Binary:
 ```
 go build .
 
-sudo chmod +x authoraizer
+sudo chmod +x eligibility
 
-./authoraizer
+./eligibility
 ```
 
 ### Docker Build
 
 Run the command:
 ```
-docker build --tag docker-authoraizer .
+docker build --tag docker-eligibility .
 ```
 
 Muilt Stage:
 ``` 
-docker build -t docker-authoraizer:multistage -f Dockerfile.multistage .
+docker build -t docker-eligibility:multistage -f Dockerfile.multistage .
 ```
 
 ### Docker Run
 
 ```
- docker run --rm --name authoraizer -p 8080:8080 docker-authoraizer
+ docker run --rm --name eligibility -p 8080:8080 docker-eligibility
 ```
 
 Muilt Stage:
 ```
-docker run --rm --name authoraizer -p 8080:8080 authoraizer:multistage
+docker run --rm --name eligibility -p 8080:8080 eligibility:multistage
 ```
 ## Command Line
 
 If you want to test an application via the command line here is an example:
 
 ```
-curl -H "Content-Type: application/json" --data @body.json http://localhost:8080/api/authoraizer
+curl -H "Content-Type: application/json" --data @body.json http://localhost:8080/api/eligibility
 ```
 
-In the project root inside "json_examples" folder you also find examples of json to use.
+In the project root inside "json_exampl
