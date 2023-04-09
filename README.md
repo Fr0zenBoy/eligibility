@@ -100,12 +100,12 @@ docker build -t docker-eligibility:multistage -f Dockerfile.multistage .
 ### Docker Run
 
 ```
- docker run --rm --name eligibility -p 8080:8080 docker-eligibility
+ docker run --rm --name eligibility -p 8080:8080 -e GIN_MODE=release docker-eligibility
 ```
 
 Muilt Stage:
 ```
-docker run --rm --name eligibility -p 8080:8080 docker-eligibility:multistage
+docker run --rm --name eligibility -p 8080:8080 -e GIN_MODE=release docker-eligibility:multistage
 ```
 ## Command Line
 
