@@ -4,7 +4,7 @@ A check system that validates that the client can be supported within the platfo
 
 ## How it works
 
-Sending a dummy transaction in json format for application at http://localhost:8080/api/eligibility.
+Sending a dummy transaction in json format for application at http://localhost:8080/api/eligible.
 
 ### Schema
 
