@@ -3,11 +3,9 @@
 ## Build
 FROM golang:1.20.2-buster AS build
 
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY pkg .
-
-COPY main.go .
+COPY . .
 
 RUN go mod download
 

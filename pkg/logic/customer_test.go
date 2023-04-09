@@ -17,22 +17,22 @@ func TestAllow(t *testing.T){
 	}
 
 	t.Run("Test CustumerClasses allowed", func(t *testing.T){
-		classes := []string{"Comercial", "Residencial", "Industrial"}
+		classes := []string{"comercial", "residencial", "industrial"}
 		testCase(CustomerClasses().Allow, classes, true)
 	})
 
 	t.Run("Test CustumerClasses not allowed", func(t *testing.T){
-		classes := []string{"Poder Publico", "Rural"}
+		classes := []string{"poder publico", "rural"}
 		testCase(CustomerClasses().Allow, classes, false)
 	})
 
 	t.Run("Test TarriffModality allowed", func(t *testing.T){
-		tariffs := []string{"Convencional", "Branca"}
+		tariffs := []string{"convencional", "branca"}
 		testCase(TariffModality().Allow, tariffs, true)
 	})
 
 	t.Run("Test TarriffModality not allowed", func(t *testing.T){
-		tariffs := []string{"Azul", "Verde",}
+		tariffs := []string{"azul", "verde",}
 		testCase(TariffModality().Allow, tariffs, false)
 	})
 

@@ -13,9 +13,9 @@ const (
 	bifasicaKWH   int64 = 500
 	trifasicaKWH  int64 = 750
 
-	YearOfConsumptions int = 12
+	monthLimit int = 12
 
-	// Co2 percentege per 1000kwh
+	//percentege of Co2 per 1000 kwh
 	co2Average float64 = 0.084
 )
 
@@ -24,7 +24,7 @@ func Co2Savings(c ConsumptionHistory) float64 {
 
 	for i, kWh := range c {
 		result += (float64(kWh) * co2Average)
-		if YearOfConsumptions == i+1 {
+		if monthLimit == i+1 {
 			break
 		}
 	}
@@ -39,10 +39,11 @@ func average(c ConsumptionHistory) int64 {
 
 	for i, value = range c {
 		total += value 
-		if i+1 == YearOfConsumptions {
+		if i+1 == monthLimit {
 			break
 		}
 	} 
+
 	return total / int64(i+1)
 }
 

@@ -105,14 +105,14 @@ docker build -t docker-eligibility:multistage -f Dockerfile.multistage .
 
 Muilt Stage:
 ```
-docker run --rm --name eligibility -p 8080:8080 eligibility:multistage
+docker run --rm --name eligibility -p 8080:8080 docker-eligibility:multistage
 ```
 ## Command Line
 
 If you want to test an application via the command line here is an example:
 
 ```
-curl -H "Content-Type: application/json" --data @body.json http://localhost:8080/api/eligibility
+curl -X POST http://localhost:8080/api/eligible \
+     -H "Content-Type: application/json" \
+     -d @body.json 
 ```
-
-In the project root inside "json_exampl

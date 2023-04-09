@@ -22,16 +22,16 @@ type allowed interface {
 
 func CustomerClasses() customerClasses {
 	cc := customerClasses{
-		Possible: []string{"Comercial", "Residencial", "Industrial", "Poder Publico", "Rural"},
-		Eligible: []string{"Comercial", "Residencial", "Industrial"},
+		Possible: []string{"comercial", "residencial", "industrial", "poder publico", "rural"},
+		Eligible: []string{"comercial", "residencial", "industrial"},
 	}
 	return cc
 }
 
 func TariffModality() tariffModality {
 	tm := tariffModality{
-		Possible: []string{"Branca", "Azul", "Verde", "Convencional"},
-		Eligible: []string{"Convencional", "Branca"},
+		Possible: []string{"branca", "azul", "verde", "convencional"},
+		Eligible: []string{"convencional", "branca"},
 	}
 	return tm
 }
